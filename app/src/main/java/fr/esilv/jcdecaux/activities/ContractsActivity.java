@@ -20,28 +20,28 @@ import fr.esilv.jcdecaux.models.Contract;
 import fr.esilv.jcdecaux.models.Contracts;
 
 public class ContractsActivity extends AppCompatActivity implements OnContractSelectedListener {
-
+	
 	private static final String CONTRACTS_URL = "https://api.jcdecaux.com/vls/v1/contracts";
 	private RecyclerView recyclerView;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contracts);
-
+		
 		recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+		
 		getContracts();
 	}
-
+	
 	private void getContracts() {
 		StringRequest contractsRequest = new StringRequest(CONTRACTS_URL + "?apiKey=" + Constants.API_KEY, new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
 				//parse data from webservice to get Contracts as Java object
 				Contracts contracts = new Gson().fromJson(response, Contracts.class);
-
+				
 				setAdapter(contracts);
 			}
 		}, new Response.ErrorListener() {
@@ -50,16 +50,16 @@ public class ContractsActivity extends AppCompatActivity implements OnContractSe
 				Log.e("Contracts", "Error");
 			}
 		});
-
+		
 		Volley.newRequestQueue(this).add(contractsRequest);
 	}
-
+	
 	private void setAdapter(Contracts contracts) {
 		ContractsAdapter adapter = new ContractsAdapter(contracts);
 		adapter.setOnContractSelectedListener(this);
 		recyclerView.setAdapter(adapter);
 	}
-
+	
 	@Override
 	public void onContractSelected(Contract contract) {
 		StationsActivity.start(this, contract.getName());

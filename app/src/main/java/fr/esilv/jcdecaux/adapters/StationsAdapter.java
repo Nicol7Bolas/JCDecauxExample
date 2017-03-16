@@ -6,15 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import fr.esilv.jcdecaux.R;
-import fr.esilv.jcdecaux.models.Contracts;
+import fr.esilv.jcdecaux.interfaces.OnStationSelectedListener;
 import fr.esilv.jcdecaux.models.Stations;
-import fr.esilv.jcdecaux.viewholders.ContractsViewHolder;
 import fr.esilv.jcdecaux.viewholders.StationsViewHolder;
 
 public class StationsAdapter extends RecyclerView.Adapter<StationsViewHolder> {
 
 	private final Stations stations;
-
+	private OnStationSelectedListener onStationSelectedListener;
+	
 	public StationsAdapter(Stations stations) {
 		this.stations = stations;
 	}
@@ -27,11 +27,16 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsViewHolder> {
 
 	@Override
 	public void onBindViewHolder(StationsViewHolder holder, int position) {
+		holder.setOnStationSelectedListener(onStationSelectedListener);
 		holder.bind(stations.get(position));
 	}
 
 	@Override
 	public int getItemCount() {
 		return stations != null ? stations.size() : 0;
+	}
+	
+	public void setOnStationSelectedListener(OnStationSelectedListener onStationSelectedListener) {
+		this.onStationSelectedListener = onStationSelectedListener;
 	}
 }
